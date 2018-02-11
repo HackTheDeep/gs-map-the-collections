@@ -1,5 +1,4 @@
-import StringIO
-import io
+import csv
 from datetime import datetime
 from dateutil.parser import parse
 from flask import Flask
@@ -7,6 +6,7 @@ from flask import request
 import os, sys
 from taxonomy_clean import receive_file
 from transform_date import date_transformer
+from georeferencing import georeferencing
 
 app = Flask(__name__)
 
@@ -21,18 +21,15 @@ def index():
 @app.route('/mapTheCollections', methods = ['POST'])
 def mapTheCollections():
 	file_as_string = request.json.get('filepath')
-	stream = io.StringIO(file_as_string.stream.read().decode("UTF8"), newline=None)
-	csv_input = csv.reader(stream)
-	#print("file contents: ", file_contents)
-	#print(type(file_contents))
-	print(csv_input)
-	for row in csv_input:
-		print(row)
+	arr_file = list(csv.reader(file_as_string.splitlines()))
+	with open('result.csv', 'wb') as f:
+		writer = csv.writer(f)
+		writer.writerows(arr_file)
 
-	stream.seek(0)
-	result = transform(stream.read())
-	result_after_taxonomy_clean = receive_file.taxonomy_clean(result)
-	result_after_date_clean = date_transformer.transform_date(result_after_taxonomy_clean)
+	result_after_taxonomy_clean = receive_file.taxonomy_clean('result.csv')
+	data = georeferencing.get_file_data(result_after_taxonomy_clean)
+
+	#result_after_date_clean = date_transformer.transform_date(result_after_taxonomy_clean)
 	return 'Successful'
 
 if __name__ == '__main__':

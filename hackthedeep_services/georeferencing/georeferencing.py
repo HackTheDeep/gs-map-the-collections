@@ -5,13 +5,13 @@ import re
 
 geocode_url = 'https://maps.googleapis.com/maps/api/geocode/json?'
 google_api_key = 'AIzaSyCDj2fjKj5aq2TPMI-LTqCpk18pAxiTw8Q'
-batch_size = 10000
+batch_size = 1000
 
 
-def get_file_data(fileName):
-	df = pd.read_excel(fileName)
+def get_file_data(df):
+	#df = pd.read_csv(fileName)
 	data = df[['Tracking Number', 'Continent', 'Country', 'Department / Province / State', 'County', 'City/Town/Hamlet', 'Specific Locale']]
-	data.to_csv('data/DirtyDataLocationSubset.csv', index=False)
+	data.to_csv('data/__locationOnlyDirtyData.csv', index=False)
 	return(data)
 
 
@@ -33,14 +33,16 @@ def make_request_to_geo(relativeUrl, option):
 
 	data = r.json()
 	data2 = s.json()
-	try: 
+	try:
 		if (len(data)):
+			print(str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 			return (str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 	except:
-		try: 
+		try:
 			if (len(data2)):
+				print(str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
 				return (str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
-		except: 
+		except:
 			return ("", "")
 	return ("", "")
 
@@ -49,6 +51,7 @@ def make_request_to_geo(relativeUrl, option):
 
 
 def clean_file(data):
+	print("Cleaning File...\n")
 	data['new_continent'] = data['Continent'].apply(lambda x: clean_data(str(x)))
 	data["new_country"] = data["Country"].apply(lambda x: clean_data(str(x)))
 	data['new_department / Province / State'] = data['Department / Province / State'].apply(lambda x: clean_data(str(x)))
@@ -56,7 +59,7 @@ def clean_file(data):
 	data['new_city/Town/Hamlet'] = data['City/Town/Hamlet'].apply(lambda x: clean_data(str(x)))
 	data['new_specific Locale'] = data['Specific Locale'].apply(lambda x: clean_data(str(x)))
 
-	data.to_csv('data/CleanDataLocationSubset.csv', index=False)
+	data.to_csv('data/__locationOnlyCleanData.csv', index=False)
 	return(data)
 
 
@@ -70,9 +73,10 @@ def clean_data(data):
 
 
 def get_geo_location(df):
+	print('Getting geographic coordinates...\n')
 	df['new_coordinates'] = df.apply(lambda row: make_request_to_geo('{} {} {} {} {} {}'.format(row['new_continent'], row['new_country'], row['new_department / Province / State'], row['new_county'], row['new_city/Town/Hamlet'],row['new_specific Locale']), '{} {} {} {}'.format(row['new_country'], row['new_department / Province / State'], row['new_county'], row['new_city/Town/Hamlet'])), axis=1)
-	df['new_longitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[0])
-	df['new_latitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[1])
+	df['new_latitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[0])
+	df['new_longitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[1])
 	return(df)
 
 def combine_location_data(dirtyData, geoLocation):
@@ -80,13 +84,13 @@ def combine_location_data(dirtyData, geoLocation):
 	data.to_csv('data/CleanedDataSet.csv', index=False)
 	return(data)
 
-
-def runGeoreferencing(fileName):
-	dirtyData = pd.read_excel(fileName)
-	df = get_file_data(fileName)
+def runGeoreferencing(df):
+	dirtyData = df
+	df = get_file_data(df)
 	df = clean_file(df)
 	df = get_geo_location(df)
 	return(combine_location_data(dirtyData, df))
+
 
 
 
@@ -98,4 +102,5 @@ def runGeoreferencing(fileName):
 # data = combine_location_data(df)
 # print(data)
 
-print(runGeoreferencing("data/DirtyDataSmallSubset.xlsx"))
+#df = pd.read_excel("data/DirtyDataSet.xlsx")
+#runGeoreferencing(df)

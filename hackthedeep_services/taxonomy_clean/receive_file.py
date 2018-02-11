@@ -3,10 +3,10 @@ import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 import worms_taxonomy_check
-from worms_taxonomy_check import get_taxonomy_for_list
+from worms_taxonomy_check import get_taxonomy_list_batch
 
 def taxonomy_clean(file):
-	wb = pd.read_csv(file, na_filter=False)
+	wb = pd.read_csv(file, index_col=0, na_filter=False)
 
 	dataframe = wb[['Family Name in Database', 'Genus Name', 'Species Name in Database', 'Species Author Name - Last 1 ']]
 	family_name_changed = []
@@ -19,7 +19,7 @@ def taxonomy_clean(file):
 	for row in dataframe.itertuples():
 		rows_to_parse.append([row._1, row._2, row._3, row._4])
 
-	results = get_taxonomy_for_list(rows_to_parse)
+	results = get_taxonomy_list_batch(rows_to_parse)
 
 	for result in results:
 		if ('error' in result):
