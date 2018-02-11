@@ -1,13 +1,13 @@
 # gs-map-the-collections
 GS@HackTheDeep: Map the Collections
 
-//**Approach**
+##**Approach**
 
 // Full Stack end-to-end user experience - from importing the file, cleaning and enriching the data then finally visualising it with full search capability
 
 
 
-//**Tech Stack**
+##**Tech Stack**
 
 //- Flask python framework
 
@@ -23,7 +23,7 @@ GS@HackTheDeep: Map the Collections
 
 
 
-//**Challenges**
+##**Challenges**
 
 // Taxonomy look up: special characters are currently ignored this causes more errors in the data than there actually could be
 
@@ -37,7 +37,7 @@ GS@HackTheDeep: Map the Collections
 
 
 
-//**Future**
+##**Future**
 
 // - create and extend the cleaning process to more columns
 
