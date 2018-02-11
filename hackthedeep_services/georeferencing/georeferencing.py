@@ -8,9 +8,44 @@ google_api_key = 'AIzaSyCDj2fjKj5aq2TPMI-LTqCpk18pAxiTw8Q'
 batch_size = 1000
 
 
+def guess_date(string_date):
+	str_date=str(string_date)
+	str_date.replace(" ","")
+	for fmt in ["%Y/%m/%d", "%d-%m-%Y", "%Y%m%d","%B,%Y","%B, %Y","%B%d,%Y","%B-%y","%d-%b-%y","%Y","%b-%y","%m/%d/%Y"]:
+		print ("fmt", fmt )
+		try:
+			return datetime.strptime(str_date, fmt).date()
+		except ValueError:
+			continue
+	print ("str_date2" , str_date)
+	return str_date
+
+def format1_date(str_date):
+	dt=guess_date(str_date)
+	
+	if dt is str_date:
+		return "Unresolved"
+	desired_date_format="%Y-%B-%d"
+	print ("desired_date_format:" , desired_date_format)
+	ret_date=dt.strftime(desired_date_format)
+	print ("ret_date:" , ret_date)
+	return ret_date
+
+
+def get_converted_date(df):
+	df['new_Date Collection Verbatim DB'] = df['Date Collection Verbatim DB'].apply(lambda x: format1_date(str(x)))
+	#data.to_csv('data/CleanDate.csv', index=False)
+	return(df)
+
+def combine_date_data(dirtyData, dateData):
+	data = pd.merge(dirtyData, dateData[['Tracking Number', 'new_Date Collection Verbatim DB']], on=['Tracking Number'])
+	#data.to_csv('data/CleanedDataSet1.csv', index=False)
+	return(data)
+
+
 def get_file_data(df):
 	#df = pd.read_csv(fileName)
-	data = df[['Tracking Number', 'Continent', 'Country', 'Department / Province / State', 'County', 'City/Town/Hamlet', 'Specific Locale']]
+	data = df[['Tracking Number', 'Date Collection Verbatim DB','Continent', 'Country', 'Department / Province / State', 'County', 'City/Town/Hamlet', 'Specific Locale']]
 	data.to_csv('data/__locationOnlyDirtyData.csv', index=False)
 	return(data)
 
@@ -89,6 +124,8 @@ def runGeoreferencing(df):
 	df = get_file_data(df)
 	df = clean_file(df)
 	df = get_geo_location(df)
+	df = get_converted_date(df)
+	df = (combine_date_data(dirtyData,df))
 	return(combine_location_data(dirtyData, df))
 
 
