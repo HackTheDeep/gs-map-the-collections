@@ -28,7 +28,7 @@ def mapTheCollections():
 		writer.writerows(arr_file)
 
 	result_after_taxonomy_clean = receive_file.taxonomy_clean('result.csv')
-	result_after_date_clean = date_transformer.transform_date(result_after_taxonomy_clean)
+	#result_after_date_clean = date_transformer.transform_date(result_after_taxonomy_clean)
 	return 'Successful'
 
 if __name__ == '__main__':
