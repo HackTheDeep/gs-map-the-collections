@@ -1,6 +1,8 @@
 # importing the requests library
 import requests
 import sys
+import numpy as np
+import math
 
 def make_request_to_worms_multiple(scientificnames):
 	url = "http://www.marinespecies.org/rest/AphiaRecordsByMatchNames"
@@ -52,14 +54,13 @@ def check_taxonomy_name_single(family, genus, species, authority, taxonomy_info)
 	if (species_name != species.upper()):
 		taxonomy_corrected['species'] = species_name.lower()
 
-	if (taxonomy_info['valid_authority'] == ''):
 	if (taxonomy_info['valid_authority'] == '' or taxonomy_info['valid_authority'] == None):
 		authority_name = ''
 	else:
 		authority_name = taxonomy_info['valid_authority'].split(',')[0][1:]
-	
+
 	authority_name_lower = authority_name.lower()
-	if (authority.lower().strip() != authority_name.lower().strip()):
+	if (authority.lower().strip() != authority_name_lower.strip()):
 		taxonomy_corrected['author_name'] = authority_name
 
 	return taxonomy_corrected
@@ -104,3 +105,18 @@ def get_taxonomy_for_list(taxonomy_info):
 
 	result = make_request_to_worms_multiple(scientificnames)
 	return handle_taxonomy_list(taxonomy_info, result)
+
+
+def get_taxonomy_list_batch(taxonomy_info):
+	ceil = math.ceil(len(taxonomy_info)/50.0)
+	split_taxonomy = np.array_split(taxonomy_info, ceil)
+	results = []
+	i = 0
+	for x in split_taxonomy:
+		result = get_taxonomy_for_list(x)
+		for r in result:
+			results.append(r)
+		i = i + 1
+
+	print results
+	return results
