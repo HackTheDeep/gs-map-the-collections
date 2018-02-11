@@ -16,6 +16,7 @@ def make_request_to_worms_multiple(scientificnames):
 		return {'error': 'Error in request'}
 
 	if (r.status_code == 204):
+		print scientificnames
 		return {'error': 'None Found for species names'}
 
 	data = r.json()
@@ -59,7 +60,9 @@ def check_taxonomy_name_single(family, genus, species, authority, taxonomy_info)
 	else:
 		authority_name = taxonomy_info['valid_authority'].split(',')[0][1:]
 
-	authority_name_lower = authority_name.lower()
+	authority_name = authority_name.encode('utf-8')
+	authority_name_lower = authority_name.encode('utf-8').strip().lower()
+
 	if (authority.lower().strip() != authority_name_lower.strip()):
 		taxonomy_corrected['author_name'] = authority_name
 
@@ -91,10 +94,14 @@ def handle_taxonomy_list(taxonomy_info, taxonomy_result):
 	reponses = []
 	for i in range(len(taxonomy_result)):
 		#handle null case
-		response = get_taxonomy_for_species(taxonomy_info[i][0], 
-			taxonomy_info[i][1], taxonomy_info[i][2], taxonomy_info[i][3], taxonomy_result[i])
-		i = i + 1
-		reponses.append(response)
+		try:
+			response = get_taxonomy_for_species(taxonomy_info[i][0], 
+				taxonomy_info[i][1], taxonomy_info[i][2], taxonomy_info[i][3], taxonomy_result[i])
+			i = i + 1
+			reponses.append(response)
+		except Exception, e:
+			reponses.append({'error': 'Error in parsing data.'})
+			continue
 	return reponses
 
 def get_taxonomy_for_list(taxonomy_info):
@@ -113,10 +120,10 @@ def get_taxonomy_list_batch(taxonomy_info):
 	results = []
 	i = 0
 	for x in split_taxonomy:
+		print i
 		result = get_taxonomy_for_list(x)
 		for r in result:
 			results.append(r)
 		i = i + 1
 
-	print results
 	return results
