@@ -1,21 +1,5 @@
 from datetime import datetime
 from dateutil.parser import parse
-from flask import Flask
-
-
-app = Flask(__name__)
-
-@app.route('/')
-def index():
-	return "Hello World!"
-
-@app.route('/clean')
-def clean():
-	return "transform endpoint"
-
-@app.route('/enrich')
-def enrich():
-	return "enrich endpoint"
 
 def guess_date(str_date):
 	str_date.replace(" ","")
@@ -33,6 +17,3 @@ def format_to_date(str_date):
 		return "Unresolved"
 	desired_date_format="%Y-%B-%d"
 	return dt.strftime(desired_date_format)
-
-if __name__ == '__main__':
-	app.run(debug=True)
