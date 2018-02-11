@@ -4,95 +4,66 @@ from datetime import datetime
 from elasticsearch import Elasticsearch
 from elasticsearch import helpers
 import pandas as pd
-
+import uuid
+es = Elasticsearch()
 def convert_csv_to_json(file):
-	wb = pd.read_csv(file, na_filter=False)
-	# with open('C:\Users\Myagmardorj\Desktop\CleanedDataSet.csv', 'rb') as csvfile:
-	date_columns= []
-	columns=list(wb.columns.values)
-
+	workbook = pd.read_csv(file, na_filter=False)
+	doc_columns= []
+	columns=list(workbook.columns.values)
+	select_columns = [
+		'LotIRN',
+		'EMu Catalog IRN'
+		]
 	for column in columns:
-		if ('new_' in column.lower()):
-			date_columns.append(column)
-	dataframe=wb[date_columns]
+		cleaned_column = column.strip()
+		# print cleaned_column
+		if ('new_' in cleaned_column.lower() or cleaned_column in select_columns):
+			doc_columns.append(column)
+	# print 'doc_columns'
+	# print doc_columns
+	# print 'workbook'
+	# print workbook
+
+	dataframe=workbook[doc_columns]
+	# nt 'dataframe'
+	# print dataframepri
 	converted_dict = dataframe.to_dict('records')
-	print converted_dict
-	# with open('C:\Users\Myagmardorj\Desktop\BadData.csv', 'rb') as csvfile:
-		# converted_dict = csv.DictReader(csvfile)
-		# # change column names to match excel headers
-		# select_columns = ['localityBaySoundHarbor'
-		# ,'localityContinent'
-		# ,'localityCounty' 
-		# ,'localityCountry' 
-		# ,'localityDeptProvinceState'
-		# ,'localityIRN'
-		# ,'localityIsland'
-		# ,'localityIslandGroup'
-		# ,'localityLakePondResevoir'
-		# ,'localityLatitude'
-		# ,'localityLongitude'
-		# ,'localityNotes'
-		# ,'localityOcean'
-		# ,'localityPreciseLocation'
-		# ,'localityRiver'
-		# ,'localitySeaGulf'
-		# ,'localityStream'
-		# ,'localityTownship'
-		# ,'localityVerbatim'
-		# ,'locationCollectedDayfrom'
-		# ,'locationCollectedDayTo'
-		# ,'locationCollectedMonthFrom'
-		# ,'locationCollectedMonthTo'
-		# ,'locationCollectedYearFrom'
-		# ,'locationCollectedYearTo'
-		# ,'locationCollectedDatefrom'
-		# ,'locationCollectedDateTo'
-		# ,'locationCollection'
-		# ,'locationDepthEnd'
-		# ,'locationDepthStart'
-		# ,'locationElevationFrom'
-		# ,'locationElevationTo'
-		# ,'locationElevationVerbatim'
-		# ,'taxGroup'
-		# ,'taxNameFamily'
-		# ,'taxNameGenus'
-		# ,'taxNameOrder'
-		# ,'taxNameSpecies'
-		# ,'taxNameSubspecies'
-		# ,'taxonomyNumberOfSpecimens'
-		# ,'trackingNumber'
-		# ,'trackingCatNumber'
-		# ,'trackingCatPrefix'
-		# ,'trackingCatSuffix',
-		# 'LotIRN',
-		# 'EMu Catalog IRN'
-		# ]
+	# print 'converted_dict'
+	# print converted_dict
 	output = []
 	for row in converted_dict:
-		cleaned_row = {k.replace(" ",""): v.replace(" ","") for k,v in row.items()}
+		# cleaned_row = {k.replace(" ",""): v for k,v in row.items()}
+		# for k,v in cleaned_row.items():
+		# 	if type(v) is str:
+		# 		cleaned_row = k, v.replace(" ","")
 		new_map = {}
-		for key in cleaned_row:
+		for key, value in row.items():
 			cleaned_key = key.strip()
-			if cleaned_key in select_columns:
-				new_map[cleaned_key] = cleaned_row[cleaned_key]
+			if type(value) is str:
+				cleaned_value = value.strip()
+			else: 
+				cleaned_value = value
+			row[key] = cleaned_value
+			new_map[cleaned_key] = row[key]
 		output.append(new_map)
 	return json.dumps(output)
 
 def persist_doc_to_elasticsearch(documents):
 	doc_list = json.loads(str(documents))
-	es = Elasticsearch()
+	# print doc_list
 	#create index with specific mapping
 	j = 0
 	actions = []
+	print len(doc_list)
 	while (j < len(doc_list)):
 		if 'LotIRN' in doc_list[j]:
 			doc_id = doc_list[j]['LotIRN']
 		elif 'EMu Catalog IRN' in doc_list[j]:
 			doc_id = doc_list[j]['EMu Catalog IRN']
 		else:
-			raise Exception('Id field not found')
+			continue;
 		action = {
-	        "_index": "collections-data",
+	        "_index": "collections-data3",
 	        "_type": "collection",
 	        "_id": doc_id,
 	        "_source": doc_list[j]
@@ -102,7 +73,10 @@ def persist_doc_to_elasticsearch(documents):
 
 	helpers.bulk(es, actions)
 
-convert_csv_to_json('CleanedDataSet.csv')
+persist_doc_to_elasticsearch(convert_csv_to_json('CleanedDataSet.csv'))
+
 def query_from_elasticsearch():
-	res = es.search(index="collections-data", body={"query": {"match_all": {}}})
+	res = es.search(index="collections-data3", body={"query": {"match_all": {}}})
 	print("Got %d Hits:" % res['hits']['total'])
+	print res
+query_from_elasticsearch()
