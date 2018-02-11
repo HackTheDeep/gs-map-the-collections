@@ -49,7 +49,6 @@ export default class Map extends Component {
         infowindow.open(this.map, marker);
       });
       this.markers.push(marker);
-      console.log(this.markers);
     });
   }
 
