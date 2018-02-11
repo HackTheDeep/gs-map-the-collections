@@ -26,20 +26,20 @@ def make_request_to_worms(scientificname):
 def check_taxonomy_name_single(family, genus, species, authority, taxonomy_info):
 	taxonomy_corrected = {}
 	if (taxonomy_info['family'].lower() != family.lower()):
-		taxonomy_corrected['family'] = taxonomy_info['family']
+		taxonomy_corrected.family = taxonomy_info['family']
 	if (taxonomy_info['genus'].lower() != genus.lower()):
-		taxonomy_corrected['genus'] = taxonomy_info['genus']
+		taxonomy_corrected.genus = taxonomy_info['genus']
 
 	species_name = taxonomy_info['scientificname'].strip().upper();
 	species_name = species_name.replace(taxonomy_info['genus'].upper(), '').strip()
 
 	if (species_name != species.upper()):
-		taxonomy_corrected['species'] = species_name.lower()
+		taxonomy_corrected.species = species_name.lower()
 
 	authority_name = taxonomy_info['valid_authority'].split(',')[0][1:]
 	authority_name_lower = authority_name.lower()
 	if (authority.lower().strip() != authority_name_lower.strip()):
-		taxonomy_corrected['author_name'] = authority_name
+		taxonomy_corrected.author_name = authority_name
 
 	return taxonomy_corrected
 
