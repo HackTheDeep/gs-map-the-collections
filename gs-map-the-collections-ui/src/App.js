@@ -12,7 +12,7 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <Header></Header>
+          <Header fluid="true"></Header>
           <Route exact path="/" component={Data} />
           <Route path="/data" component={Data} />
           <Route path="/visualize" component={Visualize} />
