@@ -33,16 +33,16 @@ def make_request_to_geo(relativeUrl, option):
 
 	data = r.json()
 	data2 = s.json()
-	try: 
+	try:
 		if (len(data)):
 			print(str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 			return (str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 	except:
-		try: 
+		try:
 			if (len(data2)):
 				print(str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
 				return (str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
-		except: 
+		except:
 			return ("", "")
 	return ("", "")
 
@@ -102,5 +102,5 @@ def runGeoreferencing(df):
 # data = combine_location_data(df)
 # print(data)
 
-df = pd.read_excel("data/DirtyDataSet.xlsx")
-runGeoreferencing(df)
+#df = pd.read_excel("data/DirtyDataSet.xlsx")
+#runGeoreferencing(df)
