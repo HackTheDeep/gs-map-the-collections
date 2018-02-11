@@ -13,7 +13,7 @@ const iconClickableShape = {
 
 var determineMarkerIcon = function(specimen, mapsInstance) {
     var imageUrl = '';
-    switch (specimen.classification.phylum) {
+    switch (specimen['Coll_Subset']) {
         case 'Mollusca':
           imageUrl = molluscaIcon;
           break;
@@ -45,96 +45,113 @@ var determineMarkerIcon = function(specimen, mapsInstance) {
 };
 
 var formatInfoWindowContent = function(specimen) {
-  let species = specimen.classification.species;
+  let species = specimen['Species Name in Database'];
+  let year = specimen['Species Year'];
+  if (year.length > 4) {
+    year.slice(0,-1);
+  }
+  const recordInfo = JSON.stringify(specimen, undefined, 2);
 
   return '<div id="content">'+
             '<h1 id="firstHeading" class="firstHeading">'+species+'</h1>'+
-            '<span class="subHeading">Classification: ' + specimen.classification.phylum + '(Phylum) > '+
-              specimen.classification.class + '(Class) > '+
-              specimen.classification.order + '(Order) > '+
-              specimen.classification.family + '(Family) > '+
-              specimen.classification.phylum + '(Genus) > '+
-             '</span>' + 
-            '<div id="bodyContent">'+
-              '<p>Collected in '+ specimen.yearCollected + ' by ' +specimen.collector.firstName + ' ' + specimen.collector.lastName +'</p>'+
+            '<div id="bodyContent" class="infoWindow--Body">'+
+              '<p>Record information:</p>'+ 
+                '<pre>'+recordInfo+'</pre>'+
             '</div>'+
           '</div>';
 };
 
+
+// const dummyData = [{
+//     position: { lat: 40.7813, lng: -73.9740 }, 
+//     localityInfo: {
+//       //TBD??
+//     },
+//     classification: {
+//       phylum: 'Mollusca',
+//       class: 'Gastropoda',
+//       order: 'Neogastropoda ',
+//       family: 'Conidae',
+//       genus: 'Conus',
+//       species: 'Conus sieboldii'
+//     },
+//     collector: {
+//       firstName: 'John',
+//       lastName: 'Smith'
+//     }, 
+//     yearCollected: 1994
+//   },
+//   {
+//     position: { lat: 40.7813, lng: -73.9700}, 
+//     localityInfo: {
+//       //TBD??
+//     },
+//     classification: {
+//       phylum: 'Crustacea',
+//       class: 'Gastropoda',
+//       order: 'Neogastropoda ',
+//       family: 'Conidae',
+//       genus: 'Conus',
+//       species: 'Conus sieboldii 2'
+//     },
+//     collector: {
+//       firstName: 'John',
+//       lastName: 'Smith'
+//     }, 
+//     yearCollected: 1994
+//   },{
+//     position: { lat: 40.7813, lng: -73.9650}, 
+//     localityInfo: {
+//       //TBD??
+//     },
+//     classification: {
+//       phylum: 'Cnidaria',
+//       class: 'Gastropoda',
+//       order: 'Neogastropoda ',
+//       family: 'Conidae',
+//       genus: 'Conus',
+//       species: 'Conus sieboldii 2'
+//     },
+//     collector: {
+//       firstName: 'John',
+//       lastName: 'Smith'
+//     }, 
+//     yearCollected: 1994
+//   },
+//   {
+//     position: { lat: 40.7813, lng: -73.9710}, 
+//     localityInfo: {
+//       //TBD??
+//     },
+//     classification: {
+//       phylum: 'Annelida',
+//       class: 'Gastropoda',
+//       order: 'Neogastropoda ',
+//       family: 'Conidae',
+//       genus: 'Conus',
+//       species: 'Conus sieboldii 2'
+//     },
+//     collector: {
+//       firstName: 'John',
+//       lastName: 'Smith'
+//     }, 
+//     yearCollected: 1994
+//   }];
+
 const dummyData = [{
-    position: { lat: 40.7813, lng: -73.9740 }, 
-    localityInfo: {
-      //TBD??
-    },
-    classification: {
-      phylum: 'Mollusca',
-      class: 'Gastropoda',
-      order: 'Neogastropoda ',
-      family: 'Conidae',
-      genus: 'Conus',
-      species: 'Conus sieboldii'
-    },
-    collector: {
-      firstName: 'John',
-      lastName: 'Smith'
-    }, 
-    yearCollected: 1994
-  },
-  {
-    position: { lat: 40.7813, lng: -73.9700}, 
-    localityInfo: {
-      //TBD??
-    },
-    classification: {
-      phylum: 'Crustacea',
-      class: 'Gastropoda',
-      order: 'Neogastropoda ',
-      family: 'Conidae',
-      genus: 'Conus',
-      species: 'Conus sieboldii 2'
-    },
-    collector: {
-      firstName: 'John',
-      lastName: 'Smith'
-    }, 
-    yearCollected: 1994
-  },{
-    position: { lat: 40.7813, lng: -73.9650}, 
-    localityInfo: {
-      //TBD??
-    },
-    classification: {
-      phylum: 'Cnidaria',
-      class: 'Gastropoda',
-      order: 'Neogastropoda ',
-      family: 'Conidae',
-      genus: 'Conus',
-      species: 'Conus sieboldii 2'
-    },
-    collector: {
-      firstName: 'John',
-      lastName: 'Smith'
-    }, 
-    yearCollected: 1994
-  },
-  {
-    position: { lat: 40.7813, lng: -73.9710}, 
-    localityInfo: {
-      //TBD??
-    },
-    classification: {
-      phylum: 'Annelida',
-      class: 'Gastropoda',
-      order: 'Neogastropoda ',
-      family: 'Conidae',
-      genus: 'Conus',
-      species: 'Conus sieboldii 2'
-    },
-    collector: {
-      firstName: 'John',
-      lastName: 'Smith'
-    }, 
-    yearCollected: 1994
-  }];
+  "Tracking Number": "M70608",
+  "Coll_Subset": "Mollusca",
+  "Family Name in Database": "Unionidae",
+  "Genus Name": "Epioblasma",
+  "Species Name in Database": "triquetra",
+  "Species Year": "1820)",
+  "new_continent": "",
+  "new_country": "United States",
+  "new_department / Province / State": "Missouri",
+  "new_county": "Valley Park",
+  "new_coordinates": "('38.2693251', '-90.8519476')",
+  "new_longitude": 38.2693251,
+  "new_latitude": -90.8519476
+}];
 
 export {dummyData, determineMarkerIcon, iconClickableShape, formatInfoWindowContent};
