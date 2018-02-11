@@ -3,7 +3,7 @@ import pandas as pd
 from pandas import ExcelWriter
 from pandas import ExcelFile
 import worms_taxonomy_check
-from worms_taxonomy_check import get_taxonomy_for_species
+from worms_taxonomy_check import get_taxonomy_for_list
 
 def taxonomy_clean(file):
 	wb = pd.read_csv(file, na_filter=False)
