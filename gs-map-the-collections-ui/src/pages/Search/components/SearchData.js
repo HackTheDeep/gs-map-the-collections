@@ -5,13 +5,13 @@ export default class SearchData extends Component {
   render() {
     return (
       <ReactiveBase
-        app="car-store"
-        credentials="cf7QByt5e:d2d60548-82a9-43cc-8b40-93cbbe75c34c">
+        app="mapTheCollections"
+        credentials="yOsE3Mn7d:caa244c4-7dfe-4441-8414-6b5cd6816e07">
         <CategorySearch
             componentId="searchbox"
-            dataField="name"
-            categoryField="brand.raw"
-            placeholder="Search the world!"
+            dataField="Coll_Subset"
+            categoryField="Coll_Subset.raw"
+            placeholder="Search me!"
           />
       </ReactiveBase>
     );
