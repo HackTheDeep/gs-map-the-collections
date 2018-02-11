@@ -13,35 +13,41 @@ def taxonomy_clean(file):
 	species_name_changed = []
 	genus_name_changed = []
 	author_name_changed = []
+	unresolved = []
 
 	rows_to_parse = []
 	for row in dataframe.itertuples():
 		rows_to_parse.append([row._1, row._2, row._3, row._4])
 
-	results = get_taxonomy_for_species(rows_to_parse)
+	results = get_taxonomy_for_list(rows_to_parse)
 
 	for result in results:
-		if ('family' in result):
-			family_name_changed.append(result['family'])
+		if ('error' in result):
+			unresolved.append(result['error'])
 		else:
-			family_name_changed.append('')
-		if ('species' in result):
-			species_name_changed.append(result['species'])
-		else:
-			species_name_changed.append('')
-		if ('genus' in result):
-			genus_name_changed.append(result['genus'])
-		else:
-			genus_name_changed.append('')
-		if ('author_name' in result):
-			author_name_changed.append(result['author_name'])
-		else:
-			author_name_changed.append('')
+			if ('family' in result):
+				family_name_changed.append(result['family'])
+			else:
+				family_name_changed.append('')
+			if ('species' in result):
+				species_name_changed.append(result['species'])
+			else:
+				species_name_changed.append('')
+			if ('genus' in result):
+				genus_name_changed.append(result['genus'])
+			else:
+				genus_name_changed.append('')
+			if ('author_name' in result):
+				author_name_changed.append(result['author_name'])
+			else:
+				author_name_changed.append('')
+			unresolved.append('')
 
-	wb['CHANGED: Family Name in Database'] = family_name_changed
-	wb['CHANGED: Species Name in Database'] = species_name_changed
-	wb['CHANGED: Genus Name'] = genus_name_changed
-	wb['CHANGED: Species Author Name - Last 1 '] = author_name_changed
+	wb['New_Family Name in Database'] = family_name_changed
+	wb['New_Species Name in Database'] = species_name_changed
+	wb['New_Genus Name'] = genus_name_changed
+	wb['New_Species Author Name - Last 1 '] = author_name_changed
+	wb['Unresolved_Taxonomy'] = unresolved
 
 	output_file = '/Volumes/Macintosh HD 2/HACK THE DEEP/Test1_cleaned.csv'
 	wb.to_csv(output_file, index=False)
