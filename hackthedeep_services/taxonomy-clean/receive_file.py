@@ -13,6 +13,7 @@ def taxonomy_clean(file):
 	species_name_changed = []
 	genus_name_changed = []
 	author_name_changed = []
+	unresolved = []
 
 	rows_to_parse = []
 	for row in dataframe.itertuples():
@@ -22,10 +23,7 @@ def taxonomy_clean(file):
 
 	for result in results:
 		if ('error' in result):
-			family_name_changed.append('UNRESOLVED')
-			species_name_changed.append('UNRESOLVED')
-			genus_name_changed.append('UNRESOLVED')
-			author_name_changed.append('UNRESOLVED')
+			unresolved.append(result['error'])
 		else:
 			if ('family' in result):
 				family_name_changed.append(result['family'])
@@ -43,11 +41,13 @@ def taxonomy_clean(file):
 				author_name_changed.append(result['author_name'])
 			else:
 				author_name_changed.append('')
+			unresolved.append('')
 
 	wb['New_Family Name in Database'] = family_name_changed
 	wb['New_Species Name in Database'] = species_name_changed
 	wb['New_Genus Name'] = genus_name_changed
 	wb['New_Species Author Name - Last 1 '] = author_name_changed
+	wb['Unresolved_Taxonomy'] = unresolved
 
 	output_file = '/Volumes/Macintosh HD 2/HACK THE DEEP/Test1_cleaned.csv'
 	wb.to_csv(output_file, index=False)
