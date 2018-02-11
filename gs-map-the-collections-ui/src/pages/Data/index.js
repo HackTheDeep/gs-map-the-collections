@@ -20,7 +20,8 @@ class Data extends Component {
       file: null,
       showError: false,
       isLoading: false,
-      cleanData: null
+      cleanData: null,
+      msg: null
     };
 
     this.dropFile = this.onDrop.bind(this);
@@ -33,55 +34,49 @@ class Data extends Component {
         showError: true
       });
     } else {
-      this.setState({
-        showError: false,
-        file: acceptedFiles[0]
-      });
+      var reader = new FileReader();
+
+      reader.onload = function (upload) {
+        this.setState({
+          file: upload.target.result,
+          showError: false,
+          msg: acceptedFiles[0].name
+        });
+      }.bind(this);
+      
+      reader.readAsText(acceptedFiles[0]);
     }
   }
 
   handleClick() {
     this.setState({ isLoading: true });
 
-    // this.setState({
-    //   isLoading: false,
-    //   cleanData: testJsonData
-    // });
-
-    fetch('http://localhost:5000/clean', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        filepath: this.state.file
-      })
-    }).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      console.log('data:', data);
-
+    if (!this.state.file) {
+      this.setState({ isLoading: false });
+    } else {
       this.setState({
-        cleanData: data,
+        cleanData: testJsonData,
         isLoading: false
       });
-    });
 
-    // TODO - API call here
-    // fetch('./data/converted.json')
-    // .then(function (response) {
-    //   console.log(response);
-    //   // return response.json();
-    // })
-    // .then(function(data) {
-    //   console.log('data:', data);
-
-    //   this.setState({
-    //     cleanData: data,
-    //     isLoading: false 
-    //   });
-    // });
+      // fetch('http://localhost:5000/mapTheCollections', {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   body: JSON.stringify({
+      //     filepath: this.state.file
+      //   })
+      // }).then(function (response) {
+      //   console.log(response);
+      //   return response.json();
+      // }).then(function (data) {
+      //   this.setState({
+      //     cleanData: testJsonData,
+      //     isLoading: false
+      //   });
+      // });
+    }
   }
 
   render() {
@@ -89,7 +84,7 @@ class Data extends Component {
       <Grid>
         <Row>
           <Col md={3} >
-            <LeftPanel onDrop={this.dropFile} isLoading={this.state.isLoading} handleClick={this.handleClick}></LeftPanel>
+            <LeftPanel msg={this.state.msg} onDrop={this.dropFile} isLoading={this.state.isLoading} handleClick={this.handleClick}></LeftPanel>
           </Col>
 
           <Col md={9}>
