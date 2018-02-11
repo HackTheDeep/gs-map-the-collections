@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 class CleanDataTableHeaders extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
 
   generateHeaders() {
     return this.props.data.map(function(col) {

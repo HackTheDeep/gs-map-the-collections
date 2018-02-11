@@ -53,12 +53,6 @@ def taxonomy_clean(file):
 	wb['New_Species Author Name - Last 1 '] = author_name_changed
 	wb['Unresolved_Taxonomy'] = unresolved
 
-	output_file = '/Volumes/Macintosh HD 2/HACK THE DEEP/Test1_cleaned.csv'
-	wb.to_csv(output_file, index=False)
+	wb.to_csv(file, index=False)
 
-	return output_file
-
-
-if __name__ == '__main__':
-    filename = sys.argv[1]
-    taxonomy_clean(filename)
+	return file
