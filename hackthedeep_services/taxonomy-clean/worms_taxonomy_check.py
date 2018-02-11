@@ -73,10 +73,12 @@ def get_taxonomy_for_species(family, genus, species, authority, response):
 		return response
 	if (len(response) == 1 and 'error' in response):
 		return response
+	if (len(response) == 1 and response[0] == None):
+		return {'error': 'Obtained no data for the combination: family: ' + family + ' genus: ' + genus + ' species: ' + species}
 	if (len(response) == 1):
 		return check_taxonomy_name_single(family, genus, species, authority, response[0])
 	else:
-		return {'error': 'Obtained more than one result for species name'}
+		return {'error': 'Obtained more than one result for combination: family: ' + family + ' genus: ' + genus + ' species: ' + species}
 
 
 def get_scientific_name(genus, species):
