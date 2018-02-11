@@ -19,10 +19,8 @@ def index():
 
 @app.route('/mapTheCollections', methods = ['POST'])
 def mapTheCollections():
-	f = request.files['data_file']
-	if not f:
-		return "No file"
-	stream = io.StringIO(f.stream.read().decode("UTF8"), newline=None)
+	file_as_string = request.json.get('filepath')
+	stream = io.StringIO(file_as_string.stream.read().decode("UTF8"), newline=None)
 	csv_input = csv.reader(stream)
 	#print("file contents: ", file_contents)
 	#print(type(file_contents))
