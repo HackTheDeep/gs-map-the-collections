@@ -21,7 +21,6 @@ def make_request_to_geo(relativeUrl, option):
 	option = option.replace("nan", "")
 	params = {'address': relativeUrl, 'key': google_api_key}
 	params2 = {'address': option, 'key': google_api_key}
-	print(relativeUrl)
 	try:
 		r = requests.get(url = geocode_url, params = params)
 		s = requests.get(url = geocode_url, params = params2)
@@ -36,12 +35,10 @@ def make_request_to_geo(relativeUrl, option):
 	data2 = s.json()
 	try: 
 		if (len(data)):
-			print(str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 			return (str(data["results"][0]["geometry"]["location"]["lat"]), str(data["results"][0]["geometry"]["location"]["lng"]))
 	except:
 		try: 
 			if (len(data2)):
-				print(str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
 				return (str(data2["results"][0]["geometry"]["location"]["lat"]), str(data2["results"][0]["geometry"]["location"]["lng"]))
 		except: 
 			return ("", "")
@@ -73,25 +70,23 @@ def clean_data(data):
 
 
 def get_geo_location(df):
-	#df['new_coordinates'] = df.apply(lambda row: make_request_to_geo(s = '{} {} {} {} {} {}'.format(row['Continent'], row['Country'], row['Department / Province / State'], row['County'], row['City/Town/Hamlet'],row['Specific Locale']), s), axis=1)
 	df['new_coordinates'] = df.apply(lambda row: make_request_to_geo('{} {} {} {} {} {}'.format(row['new_continent'], row['new_country'], row['new_department / Province / State'], row['new_county'], row['new_city/Town/Hamlet'],row['new_specific Locale']), '{} {} {} {}'.format(row['new_country'], row['new_department / Province / State'], row['new_county'], row['new_city/Town/Hamlet'])), axis=1)
 	df['new_longitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[0])
 	df['new_latitude'] = df["new_coordinates"].apply(lambda x: "" if x == None or x == () else x[1])
 	return(df)
 
 def combine_location_data(dirtyData, geoLocation):
-	data = pd.merge(dirtyData, geoLocation, on=['Tracking Number','Tracking Number'])
+	data = pd.merge(dirtyData, geoLocation[['Tracking Number', 'new_continent', 'new_country', 'new_department / Province / State', 'new_county', 'new_city/Town/Hamlet', 'new_specific Locale', 'new_coordinates', 'new_longitude', 'new_latitude']], on=['Tracking Number'])
 	data.to_csv('data/CleanedDataSet.csv', index=False)
 	return(data)
 
 
-def main(fileName):
+def runGeoreferencing(fileName):
 	dirtyData = pd.read_excel(fileName)
 	df = get_file_data(fileName)
 	df = clean_file(df)
 	df = get_geo_location(df)
 	return(combine_location_data(dirtyData, df))
-
 
 
 
@@ -103,4 +98,4 @@ def main(fileName):
 # data = combine_location_data(df)
 # print(data)
 
-print(main("data/DirtyDataSmallSubset.xlsx"))
+print(runGeoreferencing("data/DirtyDataSmallSubset.xlsx"))
