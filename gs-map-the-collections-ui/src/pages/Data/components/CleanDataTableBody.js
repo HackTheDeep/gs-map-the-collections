@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 
 class CleanDataTableBody extends Component {
-  constructor(props, context) {
-    super(props, context);
-  }
 
   generateRows() {
     return this.props.data.map(function(row) {

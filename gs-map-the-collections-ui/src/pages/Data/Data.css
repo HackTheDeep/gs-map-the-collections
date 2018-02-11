@@ -8,3 +8,7 @@
 .data-left-panel {
     background-color: aquamarine;
 }
+
+.data-export-button {
+    float: right;
+}
