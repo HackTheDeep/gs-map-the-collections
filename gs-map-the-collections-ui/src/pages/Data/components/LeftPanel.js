@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button } from 'react-bootstrap';
+import { Button, ButtonToolbar } from 'react-bootstrap';
 import Dropzone from 'react-dropzone';
 
 class LeftPanel extends Component {
@@ -14,18 +14,23 @@ class LeftPanel extends Component {
     return (
       <div>
         <Dropzone onDrop={this.props.onDrop}>
-            <div className='data-dropzone-text'>
+            <div className={this.props.msg ? 'data-dropzone-text-uploaded' : 'data-dropzone-text-default'}>
             {this.props.msg ? this.props.msg : 'Drag and drop your file or click to upload'}
             </div>
         </Dropzone>
         <br></br>
-        <Button
-            bsStyle="primary" 
-            disabled={this.props.isLoading} 
-            onClick={!this.props.isLoading ? this.props.handleClick : null}
-        >
-            {this.props.isLoading ? 'Cleaning...' : 'Clean Data'}
-        </Button>
+
+        <ButtonToolbar>
+          <Button
+              bsStyle="primary" 
+              disabled={this.props.isLoading} 
+              onClick={!this.props.isLoading ? this.props.handleClick : null}
+          >
+              {this.props.isLoading ? 'Cleaning...' : 'Clean Data'}
+          </Button>
+          
+          {this.props.msg ? <Button bsStyle="danger" onClick={this.props.handleClickCancel}>Cancel</Button> : ''}
+        </ButtonToolbar>
       </div>
     );
   }

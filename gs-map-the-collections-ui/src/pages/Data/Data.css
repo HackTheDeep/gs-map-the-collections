@@ -1,8 +1,20 @@
-.data-dropzone-text {
+.data-dropzone-text-default {
     position: relative;
     top: 50%;
     transform: translateY(-50%);
     text-align: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.data-dropzone-text-uploaded {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    color: #5cb85c;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 .data-left-panel {
@@ -11,4 +23,8 @@
 
 .data-export-button {
     float: right;
+}
+
+a {
+    color:white;
 }
