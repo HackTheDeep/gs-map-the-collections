@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
 
+import Map from '../Visualize/components/Map';
+
 class Visualize extends Component {
   render() {
     return (
-        <h1>VISUALIZE PAGE</h1>
+      <div style={{ width: '100vw', height: '100vh' }}>
+        <Map />
+      </div>
     );
   }
 }
