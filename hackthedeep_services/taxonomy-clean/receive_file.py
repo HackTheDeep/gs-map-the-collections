@@ -14,8 +14,13 @@ def taxonomy_clean(file):
 	genus_name_changed = []
 	author_name_changed = []
 
+	rows_to_parse = []
 	for row in dataframe.itertuples():
-		result = get_taxonomy_for_species(row._1, row._2, row._3, row._4)
+		rows_to_parse.append([row._1, row._2, row._3, row._4])
+
+	results = get_taxonomy_for_species(rows_to_parse)
+
+	for result in results:
 		if ('family' in result):
 			family_name_changed.append(result['family'])
 		else:
