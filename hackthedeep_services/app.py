@@ -1,7 +1,9 @@
 from datetime import datetime
 from dateutil.parser import parse
 from flask import Flask
-
+from flask import request
+import os, sys
+from taxonomy_clean import receive_file
 
 app = Flask(__name__)
 
@@ -9,9 +11,11 @@ app = Flask(__name__)
 def index():
 	return "Hello World!"
 
-@app.route('/clean')
+@app.route('/clean', methods = ['POST'])
 def clean():
-	return "transform endpoint"
+	if request.method == 'POST':
+		data = request.get_json()
+	receive_file.taxonomy_clean(data['filepath'])
 
 @app.route('/enrich')
 def enrich():
