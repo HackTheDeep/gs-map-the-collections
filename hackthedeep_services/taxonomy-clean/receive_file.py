@@ -18,7 +18,7 @@ def taxonomy_clean(file):
 	for row in dataframe.itertuples():
 		rows_to_parse.append([row._1, row._2, row._3, row._4])
 
-	results = get_taxonomy_for_species(rows_to_parse)
+	results = get_taxonomy_for_list(rows_to_parse)
 
 	for result in results:
 		if ('error' in result):
