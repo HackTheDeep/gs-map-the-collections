@@ -38,10 +38,10 @@ def taxonomy_clean(file):
 		else:
 			author_name_changed.append('')
 
-	wb['CHANGED: Family Name in Database'] = family_name_changed
-	wb['CHANGED: Species Name in Database'] = species_name_changed
-	wb['CHANGED: Genus Name'] = genus_name_changed
-	wb['CHANGED: Species Author Name - Last 1 '] = author_name_changed
+	wb['New_Family Name in Database'] = family_name_changed
+	wb['New_Species Name in Database'] = species_name_changed
+	wb['New_Genus Name'] = genus_name_changed
+	wb['New_Species Author Name - Last 1 '] = author_name_changed
 
 	output_file = '/Volumes/Macintosh HD 2/HACK THE DEEP/Test1_cleaned.csv'
 	wb.to_csv(output_file, index=False)
