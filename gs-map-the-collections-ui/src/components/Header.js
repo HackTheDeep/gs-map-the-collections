@@ -7,14 +7,14 @@ class Header extends Component {
         <Navbar>
         <Navbar.Header>
           <Navbar.Brand>
-            <a href="#home">GS Map the Collections</a>
+            <a href="/">GS Map the Collections</a>
           </Navbar.Brand>
         </Navbar.Header>
         <Nav>
-          <NavItem eventKey={1} href="#">
+          <NavItem eventKey={1} href="/data">
             Data
           </NavItem>
-          <NavItem eventKey={2} href="#">
+          <NavItem eventKey={2} href="/visualize">
             Visualize
           </NavItem>
         </Nav>
