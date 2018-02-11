@@ -21,7 +21,7 @@ def transform_date(file):
 			else:
 				date_columns.append(column)
 
-	print ("date_columns", date_columns)
+	#print ("date_columns", date_columns)
 	dataframe=wb[date_columns]
 	
 	rows_to_parse = []
@@ -43,5 +43,5 @@ def transform_date(file):
 
 if __name__ == '__main__':
     filename = sys.argv[1]
-    print ("filename",filename)
+    #print ("filename",filename)
     transform_date(filename)
