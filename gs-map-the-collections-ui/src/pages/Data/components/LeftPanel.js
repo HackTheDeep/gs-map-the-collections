@@ -15,7 +15,7 @@ class LeftPanel extends Component {
       <div>
         <Dropzone onDrop={this.props.onDrop}>
             <div className='data-dropzone-text'>
-            Drag and drop your file or click to upload
+            {this.props.msg ? this.props.msg : 'Drag and drop your file or click to upload'}
             </div>
         </Dropzone>
         <br></br>
