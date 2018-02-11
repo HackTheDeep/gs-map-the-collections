@@ -30,3 +30,13 @@
 .navbar {
   margin: 0px !important;
 }
+
+
+.infoWindow--subHeading {
+  font-style: italic;
+  font-size: 14px;
+}
+
+.infoWindow--Body {
+  margin-top: 10px;
+}
