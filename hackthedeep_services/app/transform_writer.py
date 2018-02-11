@@ -3,7 +3,8 @@ import json
 def convert_csv_to_json():
 	with open('test.csv', 'rb') as csvfile:
 		converted_dict = csv.DictReader(csvfile)
-		fieldnames = ['localityBaySoundHarbor'
+		# change column names to match excel headers
+		select_columns = ['localityBaySoundHarbor'
 		,'localityContinent'
 		,'localityCounty' 
 		,'localityCountry' 
@@ -46,16 +47,20 @@ def convert_csv_to_json():
 		,'trackingNumber'
 		,'trackingCatNumber'
 		,'trackingCatPrefix'
-		,'trackingCatSuffix'
+		,'trackingCatSuffix',
+		'LotIRN',
+		'EMu Catalog IRN'
 		]
 		output = []
 		for row in converted_dict:
 			new_map = {}
 			for key in row:
-				if key.strip() in fieldnames:
+				if key.strip() in select_columns:
 					new_map[key] = row[key]
 			output.append(new_map)
-		out = json.dumps(output)
-		print out
+		return json.dumps(output)
+
+def persist_doc_to_elasticsearch()
+
 convert_csv_to_json()
 			
