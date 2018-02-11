@@ -24,6 +24,10 @@ def taxonomy_clean(file):
 	for result in results:
 		if ('error' in result):
 			unresolved.append(result['error'])
+			family_name_changed.append('')
+			species_name_changed.append('')
+			genus_name_changed.append('')
+			author_name_changed.append('')
 		else:
 			if ('family' in result):
 				family_name_changed.append(result['family'])
