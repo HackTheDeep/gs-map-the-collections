@@ -8,6 +8,7 @@ GS@HackTheDeep: Map the Collections
 //- Flask python framework
 //- Worms API for taxonomy look up
 //- Google Maps API for visualistion and geolocation look up
+//- Python autocorrect library for spell checks
 //- ElasticSearch to store the new transformed data
 //- React.Js for a modular UI
 
@@ -20,5 +21,6 @@ GS@HackTheDeep: Map the Collections
 
 //**Future**
 // - create and extend the cleaning process to more columns
+// - populate sparse location attributes by backtracking enriched geocoordinates
 // - create a rest API to receive the "dirty" data file instead of manually uploading the file
 // - add additional visualisation libraries on top of elasticSearch - now data stored in an easy query-able state 
