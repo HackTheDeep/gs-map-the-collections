@@ -4,3 +4,7 @@
     transform: translateY(-50%);
     text-align: center;
 }
+
+.data-left-panel {
+    background-color: aquamarine;
+}
