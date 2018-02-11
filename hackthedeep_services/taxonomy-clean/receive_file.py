@@ -21,22 +21,28 @@ def taxonomy_clean(file):
 	results = get_taxonomy_for_species(rows_to_parse)
 
 	for result in results:
-		if ('family' in result):
-			family_name_changed.append(result['family'])
+		if ('error' in result):
+			family_name_changed.append('UNRESOLVED')
+			species_name_changed.append('UNRESOLVED')
+			genus_name_changed.append('UNRESOLVED')
+			author_name_changed.append('UNRESOLVED')
 		else:
-			family_name_changed.append('')
-		if ('species' in result):
-			species_name_changed.append(result['species'])
-		else:
-			species_name_changed.append('')
-		if ('genus' in result):
-			genus_name_changed.append(result['genus'])
-		else:
-			genus_name_changed.append('')
-		if ('author_name' in result):
-			author_name_changed.append(result['author_name'])
-		else:
-			author_name_changed.append('')
+			if ('family' in result):
+				family_name_changed.append(result['family'])
+			else:
+				family_name_changed.append('')
+			if ('species' in result):
+				species_name_changed.append(result['species'])
+			else:
+				species_name_changed.append('')
+			if ('genus' in result):
+				genus_name_changed.append(result['genus'])
+			else:
+				genus_name_changed.append('')
+			if ('author_name' in result):
+				author_name_changed.append(result['author_name'])
+			else:
+				author_name_changed.append('')
 
 	wb['New_Family Name in Database'] = family_name_changed
 	wb['New_Species Name in Database'] = species_name_changed
