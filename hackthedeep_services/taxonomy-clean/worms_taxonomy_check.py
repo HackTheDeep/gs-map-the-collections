@@ -53,6 +53,7 @@ def check_taxonomy_name_single(family, genus, species, authority, taxonomy_info)
 		taxonomy_corrected['species'] = species_name.lower()
 
 	if (taxonomy_info['valid_authority'] == ''):
+	if (taxonomy_info['valid_authority'] == '' or taxonomy_info['valid_authority'] == None):
 		authority_name = ''
 	else:
 		authority_name = taxonomy_info['valid_authority'].split(',')[0][1:]
