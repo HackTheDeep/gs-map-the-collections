@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import GoogleMapReact from 'google-map-react';
+//import shellIcon from './shells.png';
+import {dummyData, determineMarkerIcon, iconClickableShape, formatInfoWindowContent} from './helpers';
 
 export default class Map extends Component {
   markers = null;
@@ -22,46 +24,25 @@ export default class Map extends Component {
       this.map = map;
       this.bounds = this.maps.LatLngBounds();
 
-      // make call to get dummyData 
-      const dummyData = [{
-        position: { lat: 40.7813, lng: -73.9740 }, 
-        localityInfo: {
-          //TBD??
-        },
-        classification: {
-          phylum: 'Mollusca',
-          class: 'Gastropoda',
-          order: 'Neogastropoda ',
-          family: 'Conidae',
-          genus: 'Conus',
-          species: 'Conus sieboldii'
-        },
-        collector: {
-          firstName: 'John',
-          lastName: 'Smith'
-        }, 
-        yearCollected: 1994
-      }];
-
+      // make call to get dummyData, right now just loading a const
       this.markerData = dummyData;
     }
 
     // loop through marker data and generate a marker with a clickable info window per data point
     this.markerData.forEach((specimen) => {
-      let species = specimen.classification.species;
-      let contentString = '<div id="content">'+
-      '<div id="siteNotice">'+
-      '</div>'+
-      '<h1 id="firstHeading" class="firstHeading">'+species+'</h1>'+
-      '<div id="bodyContent">'+
-      '<p>Collected in '+specimen.yearCollected+' by '+specimen.collector.firstName + ' ' + specimen.collector.lastName +'</p>'+
-      '</div>'+
-      '</div>';
+      let contentString = formatInfoWindowContent(specimen);
       let position = new this.maps.LatLng(specimen.position.lat, specimen.position.lng);
 
-      let marker = new this.maps.Marker({position, map: this.map, title: species});
+      let marker = new this.maps.Marker({
+        position, 
+        map: this.map, 
+        title: specimen.classification.species, 
+        icon: determineMarkerIcon(specimen, this.maps), 
+        shape: iconClickableShape
+      });
       var infowindow = new this.maps.InfoWindow({
-        content: contentString
+        content: contentString,
+        maxWidth: 400
       });
       marker.addListener('click', function () {
         infowindow.open(this.map, marker);
