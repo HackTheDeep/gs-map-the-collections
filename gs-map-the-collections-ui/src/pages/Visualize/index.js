@@ -5,7 +5,7 @@ import Map from '../Visualize/components/Map';
 class Visualize extends Component {
   render() {
     return (
-      <div style={{ width: '100vw', height: '100vh' }}>
+      <div style={{ width: '99vw', height: '99vh' }}>
         <Map />
       </div>
     );

@@ -43,9 +43,29 @@ class Data extends Component {
   handleClick() {
     this.setState({ isLoading: true });
 
-    this.setState({
-      isLoading: false,
-      cleanData: testJsonData
+    // this.setState({
+    //   isLoading: false,
+    //   cleanData: testJsonData
+    // });
+
+    fetch('http://localhost:5000/clean', {
+      method: 'POST',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        filepath: this.state.file
+      })
+    }).then(function (response) {
+      return response.json();
+    }).then(function (data) {
+      console.log('data:', data);
+
+      this.setState({
+        cleanData: data,
+        isLoading: false
+      });
     });
 
     // TODO - API call here

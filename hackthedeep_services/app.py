@@ -1,42 +1,38 @@
+import StringIO
 from datetime import datetime
 from dateutil.parser import parse
 from flask import Flask
 from flask import request
 import os, sys
 from taxonomy_clean import receive_file
+from transform_date import date_transformer
 
 app = Flask(__name__)
+
+
+def transform(text_file_contents):
+    return text_file_contents.replace("=", ",")
 
 @app.route('/')
 def index():
 	return "Hello World!"
 
-@app.route('/clean', methods = ['POST'])
-def clean():
-	if request.method == 'POST':
-		data = request.get_json()
-	receive_file.taxonomy_clean(data['filepath'])
+@app.route('/mapTheCollections', methods = ['POST'])
+def mapTheCollections():
+	file_as_string = request.json.get('filepath')
+	stream = io.StringIO(file_as_string.stream.read().decode("UTF8"), newline=None)
+	csv_input = csv.reader(stream)
+	#print("file contents: ", file_contents)
+	#print(type(file_contents))
+	print(csv_input)
+	for row in csv_input:
+		print(row)
 
-@app.route('/enrich')
-def enrich():
-	return "enrich endpoint"
-
-def guess_date(str_date):
-	str_date.replace(" ","")
-	for fmt in ["%Y/%m/%d", "%d-%m-%Y", "%Y%m%d","%B,%Y","%B%d,%Y","%B-%y","%d-%b-%y","%Y","%b-%y","%m/%d/%Y"]:
-		try:
-			return datetime.strptime(str_date, fmt).date()
-		except ValueError:
-			continue
-	return str_date
-
-def format_to_date(str_date):
-	dt=guess_date(str_date)
-	print ("guess_date", dt)
-	if dt is str_date:
-		return "Unresolved"
-	desired_date_format="%Y-%B-%d"
-	return dt.strftime(desired_date_format)
+	stream.seek(0)
+	result = transform(stream.read())
+	result_after_taxonomy_clean = receive_file.taxonomy_clean(result)
+	result_after_date_clean = date_transformer.transform_date(result_after_taxonomy_clean)
+	return 'Successful'
 
 if __name__ == '__main__':
 	app.run(debug=True)
