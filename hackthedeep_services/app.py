@@ -1,4 +1,5 @@
 import StringIO
+import io
 from datetime import datetime
 from dateutil.parser import parse
 from flask import Flask
