@@ -13,9 +13,8 @@ def index():
 
 @app.route('/clean', methods = ['POST'])
 def clean():
-	if request.method == 'POST':
-		data = request.get_json()
-	receive_file.taxonomy_clean(data['filepath'])
+	filename = request.json.get('filepath')
+	return receive_file.taxonomy_clean(filename)
 
 @app.route('/enrich')
 def enrich():
