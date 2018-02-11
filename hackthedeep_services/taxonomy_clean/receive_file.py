@@ -6,7 +6,7 @@ import worms_taxonomy_check
 from worms_taxonomy_check import get_taxonomy_list_batch
 
 def taxonomy_clean(file):
-	wb = pd.read_csv(file, na_filter=False)
+	wb = pd.read_csv(file, na_filter=False, index_col=0)
 
 	dataframe = wb[['Family Name in Database', 'Genus Name', 'Species Name in Database', 'Species Author Name - Last 1 ']]
 	family_name_changed = []
