@@ -52,5 +52,5 @@ def get_taxonomy_for_species(family, genus, species, authority):
 		return response
 	if (len(response) == 1):
 		return check_taxonomy_name_single(family, genus, species, authority, response[0])
-	else
+	else:
 		return {'error': 'Obtained more than one result for species name: ' + scientificname}
