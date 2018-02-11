@@ -9,7 +9,7 @@ import numpy as np
 
 def transform_date(file):
 	
-	wb = pd.read_excel(file, na_filter=False)
+	wb = pd.read_csv(file, na_filter=False)
 	#wb = pd.read_csv(file, na_filter=False)
 	date_columns= []
 	columns=list(wb.columns.values)
@@ -28,18 +28,14 @@ def transform_date(file):
 
 	for row in dataframe.itertuples():
 		for column in row:
-			print ("row:" , row)
-			print ("column:" ,column)
 			if column in [0, '']:
 				continue
 			if 'column == "NaT"':
 				continue
 			wb['New_'+ column] = format_date(column)
 
-	output_file="transformed_date.csv"
-	output_file=wb.to_csv(output_file, index=False)
-
-	return output_file
+	wb.to_csv(file, index=False)
+	return file
 
 if __name__ == '__main__':
     filename = sys.argv[1]
